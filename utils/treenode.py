@@ -1,14 +1,18 @@
-from typing import List, Any
+from typing import List, Any, Optional
 from collections import deque
 
 class TreeNode:
-  def __init__(self, val=0, left=None, right=None):
+  def __init__(self, val=0, left:'TreeNode'=None, right:'TreeNode'=None):
     self.val = val
     self.left = left
     self.right = right
 
-  def __str__(self):
-    return f'{self.val}'
+  def __str__(self) -> str:
+    # return f'{self.val}, L: ({self.left}), R: ({self.right})'
+    return str(self.val)
+  
+  def __repr__(self) -> str:
+    return self.__str__()
 
 def create_tree(vals: List[Any]) -> TreeNode:  
   if not vals: return None
@@ -35,6 +39,19 @@ def create_tree(vals: List[Any]) -> TreeNode:
       counter = 0
 
   return root
+
+def find_node(root, val) -> Optional[TreeNode]:
+  """Finds the shallowest TreeNode descendant of root with matching val"""
+  if not root: return None
+
+  q: deque[TreeNode] = deque([root])
+  while q:
+    cur = q.popleft()
+    if cur.val == val: return cur
+    if cur.left: q.append(cur.left)
+    if cur.right: q.append(cur.right)
+
+  return None
     
 if __name__ == '__main__':
   # test tree creation and printing
