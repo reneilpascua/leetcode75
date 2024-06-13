@@ -24,7 +24,7 @@ def create_tree(vals: List[Any]) -> TreeNode:
   counter = 0
   for v in vals[1:]:
 
-    if v:
+    if v is not None:
       t = TreeNode(val=v)
       parents.append(t)
     else:
