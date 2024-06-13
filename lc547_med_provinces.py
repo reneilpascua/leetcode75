@@ -7,9 +7,11 @@ class Solution:
     
     provinces = 0
     seen = set()
+    iterations = 0
     
     def explore(city_idx):
-      nonlocal seen, isConnected
+      nonlocal seen, isConnected, iterations
+      # iterations += 1
       
       if city_idx in seen: return
       seen.add(city_idx)
@@ -25,4 +27,5 @@ class Solution:
         explore(i)
       i += 1
     
+    # print(iterations, 'iterations')
     return provinces
