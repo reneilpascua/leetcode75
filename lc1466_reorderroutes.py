@@ -10,14 +10,14 @@ class Solution:
       cx_cities[ cxn[1] ].append( cxn[0] )
     # NOTE: cx_cities[i] = [a, -b, c]
     # means city i has roads incoming from a & c, and is outgoing to b
-    print(cx_cities)
+    # print(cx_cities)
 
     # dfs from city 0
     visited = set()
     reorders = 0
     def dfs(city):
       nonlocal cx_cities, reorders, visited
-      print(city, visited)
+      # print(city, visited)
       visited.add(city)
       for cxc in cx_cities[city]:
         abs_cxc = abs(cxc)
@@ -25,6 +25,7 @@ class Solution:
         if cxc < 0:
           reorders += 1
         dfs(abs_cxc)
+    
     dfs(0)
     return reorders
 
