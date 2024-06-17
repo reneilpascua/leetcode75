@@ -1,3 +1,4 @@
+from math import comb
 class Solution:
   def uniquePaths(self, m: int, n: int) -> int:
     dp = [ [0 for _ in range(n)] for __ in range(m) ]
@@ -12,10 +13,13 @@ class Solution:
         dp[i][j] = dp[i-1][j] + dp[i][j-1]
     
     # print(dp)
+    # k = (m-1)+(n-1)
+    # # the answer will be on the k-(n-1)th term, ie. m-1
+    # print(comb(k,m-1))
     return dp[-1][-1]
   
 if __name__ == '__main__':
-  ex1 = (2,4)
+  ex1 = (3,3)
   ex2 = (3,4)
   ex3 = (10,10)
   print(Solution().uniquePaths(*ex1))
