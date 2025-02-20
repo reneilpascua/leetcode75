@@ -1,23 +1,18 @@
 from typing import List
-
+from heapq import heapify, heappop
 class Solution:
     def findKthLargest(self, nums: List[int], k: int) -> int:
-        seen = [float('inf')]
-        def add_to_seen(n: int):
-            nonlocal seen
+        # sort (O(nlogn)) and then go to the -kth index (O(1))
+        # nums.sort()
+        # return nums[-k] # O(nlogn)
 
-            if len(seen) > k+1 and n < seen[-1]:
-                return
-            i = 0
-            l = len(seen)
-            while i < l and n < seen[i]:
-                i+=1
-            seen = seen[:i] + [n] + seen[i:]
+        # heapify (O(n)) and then pop k-1 times (O(klogn))
+        h = [-n for n in nums] # negative to make max heap
+        heapify(h)
+        for _ in range(k-1):
+            heappop(h)
         
-        for n in nums:
-            add_to_seen(n)
-        # print(seen)
-        return seen[k]
+        return -h[0] # O(klogn) < O(n) < O(nlogn) assuming k << n
 
 if __name__ == '__main__':
     t = [5,3,7,8,1,2,4]
