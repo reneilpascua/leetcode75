@@ -30,13 +30,12 @@ class Solution:
             # push prioritized item into pq (prio = -count)
             heappush(my_heap, (-count[num], num))
             
-            # the count dict keeps track of all frequencies
-            # the heap just needs to track the max
-            # pop "everything" (shouldnt be more than once) except the max
+            # the count-dict keeps track of all frequencies
+            # the heap knows the max at one point in time
+            # heap's max CAN contain outdated info (ex. if the max was reduced by freq)
+            # pop the max(es) from the heap if they don't agree with the corresponding val found in count-dict
             while my_heap[0][0] != -count[ my_heap[0][1] ]:
                 heappop(my_heap)
-            # after 'while' finishes, my_heap should only contain one node (the max)
-            
 
             ans.append(-my_heap[0][0]) # peek and make positive
         # O(n) for the outer loop, and O(1) for the popping since we guarantee at most 2 elements in the heap
