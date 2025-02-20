@@ -60,13 +60,13 @@ class Solution:
         return l1
         
 if __name__ == '__main__':
-    from utils.performance import timer
+    from utils.performance import timer_0
 
-    @timer
+    @timer_0
     def time_iterative(testcase):
         return Solution().reverseListIterative(testcase)
 
-    @timer
+    @timer_0
     def time_recursive(testcase):
         # return Solution().reverseListRecursive_half(testcase)
         return Solution().reverseListRecursive(testcase)
