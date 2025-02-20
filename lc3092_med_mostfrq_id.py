@@ -1,20 +1,63 @@
 from typing import List
+from heapq import heappush, heappop
+
+
+from utils.performance import timer
 
 class Solution:
-    def mostFrequentIDs(self, nums: List[int], freq: List[int]) -> List[int]:
-        n = len(nums)
-        ans = [0]*n
+    def mostFrequentIDs_0(self, nums: List[int], freq: List[int]) -> List[int]:
+        ans = []
         count = dict()
-        for i in range(n):
-            if nums[i] not in count:
-                count[nums[i]] = 0
-            count[nums[i]] = max(0, count[nums[i]] + freq[i])
-            ans[i] = max(count.values())
+
+        for num, frq in zip(nums, freq): # O(n)
+            if num not in count:
+                count[num] = 0
+            count[num] = max(0, count[num]+frq)
+            ans.append(max(count.values())) # O(n)
+        # --> O(n^2)
+
+        return ans # TLE
+    
+    def mostFrequentIDs(self, nums: List[int], freq: List[int]) -> List[int]:
+        ans = []
+        count = dict()
+
+        my_heap = [] # default min-heap, uses (-freq, num) for prio queue
+        for num, frq in zip(nums, freq): # O(n)
+            if num not in count:
+                count[num] = 0
+            count[num] = max(0, count[num]+frq)
+            # push prioritized item into pq (prio = -count)
+            heappush(my_heap, (-count[num], num))
+            
+            # the count dict keeps track of all frequencies
+            # the heap just needs to track the max
+            # pop "everything" (shouldnt be more than once) except the max
+            while my_heap[0][0] != -count[ my_heap[0][1] ]:
+                heappop(my_heap)
+            # after 'while' finishes, my_heap should only contain one node (the max)
+            
+
+            ans.append(-my_heap[0][0]) # peek and make positive
+        # O(n) for the outer loop, and O(1) for the popping since we guarantee at most 2 elements in the heap
+        # --> O(n)
         
         return ans
 
+@timer
 def main():
-    pass
+    tc1 = ( [2,3,2,1], [3,2,-3,1] )
+    tc2 = ( [5,5,3], [2,-2,1] )
+    
+    s = Solution()
+    print(s.mostFrequentIDs(*tc1))
+    print(s.mostFrequentIDs(*tc2))
+
+    # use TLE test case from leetcode website
+    USE_BIG_TESTCASE = False
+    if USE_BIG_TESTCASE:
+        from utils.temp_testcase import nums, freq
+        s.mostFrequentIDs(nums, freq)
 
 if __name__ == '__main__':
     main()
