@@ -1,6 +1,6 @@
 from time import perf_counter
 
-def timer(func):
+def timer_0(func):
     """
     tracks the execution time of a function.
 
@@ -16,7 +16,19 @@ def timer(func):
         return result, t2-t1
     return wrapper
 
-@timer
+def timer(func):
+    """
+    tracks the execution time of a function and prints it.
+    """
+    def wrapper(*args, **kwargs):
+        t1 = perf_counter()
+        result = func(*args, **kwargs)
+        t2 = perf_counter()
+        print(f'{func.__name__} took {t2-t1} seconds.')
+        return result
+    return wrapper
+
+@timer_0
 def test_timer():
     print("timer has started")
     result = input("type any word to stop:\t")
