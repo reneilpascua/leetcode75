@@ -6,7 +6,32 @@ from utils.performance import timer
 from utils.temp_testcase import buildings
 
 class Solution:
-    
+    def getSkyline(self, buildings: List[List[int]]) -> List[List[int]]:
+        # create sorted list of left-biased segments from buildings (L,R,H)
+        # switch places for R and H --> (L,H,R) so that H is the second sort var.
+        # the right side of a building is the left of imaginary building with H=0
+        segments = sorted(
+            # use -h bc gonna use max heap          inf is placeholder
+            [(l,-h,r) for l,r,h in buildings] + [(r,0,'inf') for _,r,__ in buildings]
+        )
+
+        ans = [[0,0]]
+        max_heap = [(0, float('inf'))] # (negative height, x)
+        # priority is biggest height, then leftest x.
+        
+        for x, negH, r in segments:
+            while x >= max_heap[0][1]:
+                heappop(max_heap)
+                # only care about heap items to the right of x
+            if negH: # non-zero height
+                heappush(max_heap, (negH, r)) # why r? because
+                # later, when we process x2 < r1, we may see that it is towered
+                # by a building from x1 where h1>h2 (due to max heap)
+            max_at_x = -max_heap[0][0] # the earlier popping ensures this.
+            if ans[-1][1] != max_at_x:
+                ans.append([x, max_at_x])
+            # else it's the same height and part of the same continuous seg
+        return ans[1:] # dont include the origin
     
     def getSkyline_1(self, buildings: List[List[int]]) -> List[List[int]]:
         print(f'buildings is {len(buildings)} long')
@@ -93,15 +118,15 @@ class Solution:
 
 @timer
 def main():
-    buildings1 = [[2,9,10],[3,7,15],[5,12,12],[15,20,10],[19,24,8]]
-    buildings2 = [[0,2,3],[2,5,3]]
-    buildings3 = [[0,2,3],[2,4,3],[4,6,3]]
-    Solution().getSkyline_0(buildings1)
-    Solution().getSkyline_0(buildings2)
-    Solution().getSkyline_0(buildings3)
+    # buildings1 = [[2,9,10],[3,7,15],[5,12,12],[15,20,10],[19,24,8]]
+    # buildings2 = [[0,2,3],[2,5,3]]
+    # buildings3 = [[0,2,3],[2,4,3],[4,6,3]]
+    # print(Solution().getSkyline(buildings1))
+    # print(Solution().getSkyline(buildings2))
+    # print(Solution().getSkyline(buildings3))
     
     # big test case:
-    # Solution().getSkyline(buildings)
+    print(Solution().getSkyline(buildings))
 
 if __name__ == '__main__':
     main()
